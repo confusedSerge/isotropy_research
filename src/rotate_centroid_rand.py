@@ -166,7 +166,7 @@ def main():
     # print labels for each column
     print('rot \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t mean_scalar_proj')
 
-    for _ in range(rotations):
+    for rot in range(rotations):
 
         # rand_vec = rotate_centroid_rand(centroid)
         # logging.info("Currently at alpha=" + str(alpha))
@@ -182,14 +182,11 @@ def main():
         mean_sp = mean_scalar_proj(eval_matrix, centroid)
 
         # print statistics
-        result_tuple = (_, wordsim, bias, log_bias, isotropy, len_centroid, mean_scalar_proj)
+        result_tuple = (rot, wordsim, bias, log_bias, isotropy, len_centroid, mean_scalar_proj)
         output = ''
         for entry in result_tuple:
             output += '{:.6f}\t'.format(entry)
         print(output.strip())
-
-        # increment alpha, rounding cause python cant do maths...
-        alpha = round(alpha + step, 2)
 
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
