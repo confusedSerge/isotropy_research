@@ -182,7 +182,7 @@ def main():
         mean_sp = mean_scalar_proj(eval_matrix, centroid)
 
         # print statistics
-        result_tuple = (rot, wordsim, bias, log_bias, isotropy, len_centroid, mean_scalar_proj)
+        result_tuple = (rot, wordsim, bias, log_bias, isotropy, len_centroid, mean_sp)
         output = ''
         for entry in result_tuple:
             output += '{:.6f}\t'.format(entry)
