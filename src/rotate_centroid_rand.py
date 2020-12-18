@@ -106,8 +106,8 @@ def mean_scalar_proj(matrix, centroid):
     """
     return np.mean(np.dot(matrix, centroid.T / np.linalg.norm(centroid.T)))
 
-def rotate_centroid_rand(centroid):
-    return np.random.rand(len(centroid)) * centroid
+def rotate_centroid_rand(centroid, cl_multi):
+    return cl_multi * np.linalg.norm(centroid) * np.random.uniform(-1, 1, len(centroid))
 
 def main():
     """
@@ -119,18 +119,20 @@ def main():
     # Get the arguments
     args = docopt("""various statistiks for input matrix
     Usage:
-        test_statistik_wordsim.py <matrixPath> <wordsim_goldPath> <freqPath> <#randrot>
+        test_statistik_wordsim.py <matrixPath> <wordsim_goldPath> <freqPath> <#randrot> <#multiplier>
 
     Arguments:
         <matrixPath> = path to matrix1
         <wordsim_goldPath> = path to godl data wordsim
         <freqPath> = path to freq data
+        <#randrot> = number of rand vectors
     """)
 
     matrixPath = args['<matrixPath>']
     wordsim_goldPath = args['<wordsim_goldPath>']
     freqPath = args['<freqPath>']
     rotations = int(args['<#randrot>'])
+    multiplier = int(args['<#multiplier>'])
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     logging.info(__file__.upper())
@@ -164,25 +166,27 @@ def main():
     # print(freq_encoding(matrix, centroid, freqs, words))
 
     # print labels for each column
-    print('rot \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t mean_scalar_proj')
+    print('rot \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t mean_scalar_proj \t CS_rand')
 
     for rot in range(rotations):
 
-        # rand_vec = rotate_centroid_rand(centroid)
+        rand_vec = rotate_centroid_rand(centroid, multiplier)
         # logging.info("Currently at alpha=" + str(alpha))
 
         # calc new move
-        eval_matrix = matrix - rotate_centroid_rand(centroid)
+        eval_matrix = matrix - rand_vec
 
         # calculate statistics
         wordsim = corr_CD_wordsim(eval_matrix, words, gold)
         bias = corr_CD_freq(eval_matrix, words, gold, freqs)
         log_bias = corr_CD_freq(eval_matrix, words, gold, logfreqs)
         isotropy, len_centroid = isotropyANDcentroid(eval_matrix)
+
         mean_sp = mean_scalar_proj(eval_matrix, centroid)
+        cosine_sim_rand = np.dot(centroid, rand_vec) / (np.linalg.norm(centroid) * np.linalg.norm(rand_vec))
 
         # print statistics
-        result_tuple = (rot, wordsim, bias, log_bias, isotropy, len_centroid, mean_sp)
+        result_tuple = (rot, wordsim, bias, log_bias, isotropy, len_centroid, mean_sp, cosine_sim_rand)
         output = ''
         for entry in result_tuple:
             output += '{:.6f}\t'.format(entry)
@@ -194,8 +198,9 @@ def main():
 if __name__ == '__main__':
     main()
 
-# matr = np.array(([1, 2, 5], [2, 3, 4], [5, 4, 3]))
+# matr = np.array(([1, 2, -5], [2, 3, 1], [-5, 4, 3]))
 # centroid = np.mean(matr, axis=0)
 
 # print(centroid)
-# print(rotate_centroid_rand(centroid))
+# print(np.linalg.norm(centroid))
+# print(rotate_centroid_rand(centroid, 2))
