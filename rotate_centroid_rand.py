@@ -130,7 +130,7 @@ def main():
     matrixPath = args['<matrixPath>']
     wordsim_goldPath = args['<wordsim_goldPath>']
     freqPath = args['<freqPath>']
-    rotations = args['<#randrot>']
+    rotations = int(args['<#randrot>'])
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     logging.info(__file__.upper())
