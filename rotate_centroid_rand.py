@@ -161,7 +161,7 @@ def main():
             freqs[word] = np.nan
 
     # correlation between scalar projection and freq
-    print(freq_encoding(matrix, centroid, freqs, words))
+    # print(freq_encoding(matrix, centroid, freqs, words))
 
     # print labels for each column
     print('rot \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t mean_scalar_proj')
