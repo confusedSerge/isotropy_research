@@ -72,12 +72,12 @@ def loadMatrix(path):
 
 def isotropyANDcentroid(matrix):
     # compute centroid length
-    matrix = np.matrix(matrix)
-    # l2norm = np.linalg.norm(matrix, axis=1, ord=2)
-    # l2norm[l2norm == 0.0] = 1.0  # Convert 0 values to 1
-    # matrix /= l2norm.reshape(len(l2norm), 1)
+    _matrix = np.matrix(matrix)
+    l2norm = np.linalg.norm(_matrix, axis=1, ord=2)
+    l2norm[l2norm == 0.0] = 1.0  # Convert 0 values to 1
+    _matrix /= l2norm.reshape(len(l2norm), 1)
     # Center matrix
-    avg = np.mean(matrix, axis=0)
+    avg = np.mean(_matrix, axis=0)
     centroid_length = 1 - np.linalg.norm(avg).round(3)
 
     # compute Isotropy after l2 normalising
@@ -164,6 +164,8 @@ def main():
     end = 4
     step = 0.1
     alpha = start
+
+    print("centroid length: {}".format(np.linalg.norm(centroid)))
 
     # print labels for each column
     print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t cfreq_enc')

@@ -165,6 +165,8 @@ def main():
     step = 0.1
     alpha = start
 
+    print("centroid length: {}".format(np.linalg.norm(centroid)))
+
     # print labels for each column
     print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t cfreq_enc')
 
