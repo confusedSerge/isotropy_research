@@ -166,7 +166,7 @@ def main():
     alpha = start
 
     # print labels for each column
-    print('alpha \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t meanval')
+    print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t cfreq_enc')
 
     while alpha <= end:
         logging.info("Currently at alpha=" + str(alpha))
@@ -179,9 +179,10 @@ def main():
         log_bias = corr_CD_freq(eval_matrix, words, gold, logfreqs)
         isotropy, len_centroid = isotropyANDcentroid(eval_matrix)
         mean_sp = mean_scalar_proj(eval_matrix, centroid)
+        cfreq_enc = freq_encoding(eval_matrix, centroid, freqs, words)
 
         # print statistics
-        result_tuple = (alpha, wordsim, bias, log_bias, isotropy, len_centroid, mean_sp)
+        result_tuple = (alpha, wordsim, log_bias, isotropy, len_centroid, cfreq_enc)
         output = ''
         for entry in result_tuple:
             output += '{:.6f}\t'.format(entry)
