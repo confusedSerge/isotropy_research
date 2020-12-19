@@ -106,8 +106,8 @@ def mean_scalar_proj(matrix, centroid):
     """
     return np.mean(np.dot(matrix, centroid.T / np.linalg.norm(centroid.T)))
 
-def rotate_centroid_rand(centroid, cl_multi):
-    return cl_multi * np.linalg.norm(centroid) * np.random.uniform(-1, 1, len(centroid))
+def rotate_centroid_rand(centroid):
+    return np.linalg.norm(centroid) * np.random.uniform(-1, 1, len(centroid))
 
 def main():
     """
@@ -119,13 +119,12 @@ def main():
     # Get the arguments
     args = docopt("""various statistiks for input matrix
     Usage:
-        test_statistik_wordsim.py <matrixPath> <wordsim_goldPath> <freqPath> <#randrot> <#multiplier>
+        test_statistik_wordsim.py <matrixPath> <wordsim_goldPath> <freqPath>
 
     Arguments:
         <matrixPath> = path to matrix1
         <wordsim_goldPath> = path to godl data wordsim
         <freqPath> = path to freq data
-        <#randrot> = number of rand vectors
     """)
 
     matrixPath = args['<matrixPath>']
@@ -165,16 +164,23 @@ def main():
     # correlation between scalar projection and freq
     # print(freq_encoding(matrix, centroid, freqs, words))
 
+    # alpha step setup
+    start = -2
+    end = 4
+    step = 0.1
+    alpha = start
+
     # print labels for each column
-    print('rot \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t mean_scalar_proj \t CS_rand')
+    print('alpha \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t meanval \t CS_rand')
 
-    for rot in range(rotations):
+    while alpha <= end:
+        logging.info("Currently at alpha=" + str(alpha))
 
-        rand_vec = rotate_centroid_rand(centroid, multiplier)
+        rand_vec = rotate_centroid_rand(centroid)
         # logging.info("Currently at alpha=" + str(alpha))
 
         # calc new move
-        eval_matrix = matrix - rand_vec
+        eval_matrix = matrix - alpha * rand_vec 
 
         # calculate statistics
         wordsim = corr_CD_wordsim(eval_matrix, words, gold)
@@ -192,15 +198,11 @@ def main():
             output += '{:.6f}\t'.format(entry)
         print(output.strip())
 
+        # increment alpha, rounding cause python cant do maths...
+        alpha = round(alpha + step, 2)
+
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':
     main()
-
-# matr = np.array(([1, 2, -5], [2, 3, 1], [-5, 4, 3]))
-# centroid = np.mean(matr, axis=0)
-
-# print(centroid)
-# print(np.linalg.norm(centroid))
-# print(rotate_centroid_rand(centroid, 2))

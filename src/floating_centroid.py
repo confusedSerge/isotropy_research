@@ -166,7 +166,7 @@ def main():
     alpha = start
 
     # print labels for each column
-    print('alpha \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid*')
+    print('alpha \t wordsim \t freq_bias \t log_bias \t isotropy \t len_centroid* \t meanval')
 
     while alpha <= end:
         logging.info("Currently at alpha=" + str(alpha))
