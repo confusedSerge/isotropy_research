@@ -157,7 +157,7 @@ def main():
             freqs[word] = np.nan
 
     # correlation between scalar projection and freq
-    print(freq_encoding(matrix, centroid, freqs, words))
+    # print(freq_encoding(matrix, centroid, freqs, words))
 
     # alpha step setup
     start = -2
@@ -193,10 +193,5 @@ def main():
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
-# if __name__ == '__main__':
-#     main()
-
-
-matr = np.array(([1, 2, 5], [2, 3, 4], [5, 4, 3]))
-centroid = np.mean(matr, axis=0)
-print(mean_scalar_proj(matr - centroid, centroid))
+if __name__ == '__main__':
+    main()
