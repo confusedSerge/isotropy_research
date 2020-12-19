@@ -102,7 +102,7 @@ def main():
     # print(freq_encoding(matrix, centroid, freqs, words))
 
     # print labels for each column
-    print('scores \t freq_diff')
+    print('freq_diff \t scores')
 
     eval_matrix = matrix - alpha * centroid
 
