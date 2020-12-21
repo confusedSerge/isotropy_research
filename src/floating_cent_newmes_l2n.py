@@ -120,8 +120,8 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
         else:
             distance = np.nan
             diff = np.nan
-        scalar_projection_diff.append(sp_diff)
-        freq_diff.append(diff)
+        scalar_projection_diff += [sp_diff]
+        freq_diff += [diff]
     return spearmanr(freq_diff, scalar_projection_diff, nan_policy='omit')[0]
 
 
