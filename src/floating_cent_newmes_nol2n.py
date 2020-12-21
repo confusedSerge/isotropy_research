@@ -113,13 +113,13 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
             sp_2 = np.dot(vector2, cent)
 
             diff = abs(freq[word1] - freq[word2])
-            sp_diff = (sp_1 - sp_2)[0][0]
+            sp_diff = sp_1 - sp_2
 
-            logging.info("freq: {}, sp_diff: {}".format(diff, sp_diff))
+            logging.info("freq: {}, sp_diff: {}".format(diff, sp_diff[0][0]))
         else:
             diff = np.nan
             sp_diff = np.nan
-        scalar_projection_diff += [sp_diff]
+        scalar_projection_diff += [sp_diff[0][0]]
         freq_diff += [diff]
     logging.info("freq: {}, sp_diff: {}".format(freq_diff, scalar_projection_diff))
 
