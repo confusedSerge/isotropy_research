@@ -112,11 +112,11 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
             vector2 = matrix[words.index(word2)]
 
             cent = centroid.T / np.linalg.norm(centroid.T)
-            sp_1 = np.dot(vector1, cent)[0][0]
-            sp_2 = np.dot(vector2, cent)[0][0]
+            sp_1 = np.dot(vector1, cent)
+            sp_2 = np.dot(vector2, cent)
 
             diff = abs(freq[word1] - freq[word2])
-            sp_diff = sp_1 - sp_2
+            sp_diff = (sp_1 - sp_2)[0][0]
         else:
             diff = np.nan
             sp_diff = np.nan
