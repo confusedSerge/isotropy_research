@@ -104,7 +104,9 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
     scalar_projection_diff = []
     for (word1, word2) in targets:
         # get distance for all targets, nan if oof
+        logging.info("im feeling it now mr crabs")
         if word1 in words and word2 in words:
+            logging.info("im feeling it now mr crabs 2")
             vector1 = matrix[words.index(word1)]
             vector2 = matrix[words.index(word2)]
 
@@ -112,13 +114,17 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
             sp_1 = np.dot(vector1, cent)
             sp_2 = np.dot(vector2, cent)
 
+            logging.info("sp1 {}, sp2 {}".format(sp_1, sp_2))
+
             diff = abs(freq[word1] - freq[word2])
-            sp_diff = abs(sp_1 - sp_2)
+            sp_diff = sp_1 - sp_2
         else:
             diff = np.nan
             sp_diff = np.nan
         scalar_projection_diff += [sp_diff]
         freq_diff += [diff]
+    print(type(freq_diff))
+    print(type(scalar_projection_diff))
     return spearmanr(freq_diff, scalar_projection_diff, nan_policy='omit')[0]
 
 
