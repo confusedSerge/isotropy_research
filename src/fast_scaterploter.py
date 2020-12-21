@@ -43,7 +43,7 @@ def main():
 
     ax1.set_title(filePath.split('/')[-1] + ', ' + title)
     ax1.set_xlim([0,2])
-    ax1.set_ylim([0,1])
+    ax1.set_ylim([0,2])
     plt.xlabel('freq_diff')
     plt.ylabel('score')
     plt.savefig(outname)

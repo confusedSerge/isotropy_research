@@ -22,6 +22,8 @@ def corr_CD_wordsim(matrix, words, gold_data):
     return spearmanr(scores, gold, nan_policy='omit')[0]
 
 # returns correlation between measured CD and freq
+
+
 def corr_CD_freq(matrix, words, targets, freq):
     freq_diff = []
     scores = []
@@ -39,6 +41,23 @@ def corr_CD_freq(matrix, words, targets, freq):
         freq_diff += [diff]
     return spearmanr(scores, freq_diff, nan_policy='omit')[0]
 
+def word_freq_spliter(words, targets, freq):
+    freq_100_200 = []
+    freq_201_1000 = []
+    freq_g1000 = []
+    for (word1, word2) in targets:
+        # get distance for all targets, nan if oof
+        if word1 in words and word2 in words:
+            freq_w = max(freq[word1], freq[word2])
+            if 100 <= freq_w <= 200:
+                freq_100_200.append((word1, word2))
+            if 201 <= freq_w <= 1000:
+                freq_201_1000.append((word1, word2))
+            if freq_w > 1000:
+                freq_g1000.append((word1, word2))
+
+    return freq_100_200, freq_201_1000, freq_g1000
+
 
 def loadMatrix(path):
     matrix_full = []
@@ -54,8 +73,11 @@ def loadMatrix(path):
             matrix_full += [vector]
             word_index += [word]
 
-    # compute centroid_high
+    # normalize and compute centroid_high
     matrix_full = np.matrix(matrix_full)
+    l2norm = np.linalg.norm(matrix_full, axis=1, ord=2)
+    l2norm[l2norm == 0.0] = 1.0  # Convert 0 values to 1
+    matrix_full /= l2norm.reshape(len(l2norm), 1)
     centroid = np.mean(matrix_full, axis=0)
 
     return matrix_full, word_index, centroid
@@ -63,12 +85,12 @@ def loadMatrix(path):
 
 def isotropyANDcentroid(matrix):
     # compute centroid length
-    _matrix = np.matrix(matrix)
-    l2norm = np.linalg.norm(_matrix, axis=1, ord=2)
+    matrix = np.matrix(matrix)
+    l2norm = np.linalg.norm(matrix, axis=1, ord=2)
     l2norm[l2norm == 0.0] = 1.0  # Convert 0 values to 1
-    _matrix /= l2norm.reshape(len(l2norm), 1)
+    matrix /= l2norm.reshape(len(l2norm), 1)
     # Center matrix
-    avg = np.mean(_matrix, axis=0)
+    avg = np.mean(matrix, axis=0)
     centroid_length = 1 - np.linalg.norm(avg).round(3)
 
     # compute Isotropy after l2 normalising
@@ -80,22 +102,28 @@ def isotropyANDcentroid(matrix):
     return isotropy, centroid_length
 
 
-def freq_encoding(matrix, vector, freqs, words):
-    """
-    returns the correlation between scalar projection of vector and frequency
-    formula for scalar projection: (M * v) / (||v||)
-    """
-    # set vector length to 1.
-    vector = vector / np.linalg.norm(vector, axis=1, ord=2)
-    scalar_projection_values = np.array((matrix * vector.T)).squeeze().tolist()
-    freq_values = [freqs[word] for word in words]
-    return spearmanr(scalar_projection_values, freq_values,nan_policy='omit')[0]
+def log_freq_target_diff(matrix, words, targets, freq, centroid):
+    freq_diff = []
+    scalar_projection_diff = []
+    for (word1, word2) in targets:
+        # get distance for all targets, nan if oof
+        if word1 in words and word2 in words:
+            vector1 = matrix[words.index(word1)]
+            vector2 = matrix[words.index(word2)]
 
-def mean_scalar_proj(matrix, centroid):
-    """
-    Returns the mean scalar projection of the matrix onto the centroid
-    """
-    return np.mean(np.dot(matrix, centroid.T / np.linalg.norm(centroid.T)))
+            cent = centroid.T / np.linalg.norm(centroid.T)
+            sp_1 = np.dot(vector1, cent)
+            sp_2 = np.dot(vector2, cent)
+
+            diff = abs(freq[word1] - freq[word2])
+            sp_diff = abs(sp_1 - sp_2)
+        else:
+            distance = np.nan
+            diff = np.nan
+        scalar_projection_diff.append(sp_diff)
+        freq_diff.append(diff)
+    return spearmanr(freq_diff, scalar_projection_diff, nan_policy='omit')[0]
+
 
 def main():
     """
@@ -119,7 +147,8 @@ def main():
     wordsim_goldPath = args['<wordsim_goldPath>']
     freqPath = args['<freqPath>']
 
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+    logging.basicConfig(
+        format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     logging.info(__file__.upper())
     start_time = time.time()
 
@@ -156,10 +185,12 @@ def main():
     step = 0.1
     alpha = start
 
-    print("centroid length: {}".format(np.linalg.norm(centroid)))
+    # print("centroid length: {}".format(np.linalg.norm(centroid)))
+
+    wp1, wp2, wp3 = word_freq_spliter(words, gold, freqs)
 
     # print labels for each column
-    print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t cfreq_enc')
+    print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t lf_sp_cor \t lb_l \t lb_m \t lb_h')
 
     while alpha <= end:
         logging.info("Currently at alpha=" + str(alpha))
@@ -168,14 +199,17 @@ def main():
 
         # calculate statistics
         wordsim = corr_CD_wordsim(eval_matrix, words, gold)
-        bias = corr_CD_freq(eval_matrix, words, gold, freqs)
         log_bias = corr_CD_freq(eval_matrix, words, gold, logfreqs)
+        lb_l = corr_CD_freq(eval_matrix, words, wp1, logfreqs)
+        lb_m = corr_CD_freq(eval_matrix, words, wp2, logfreqs)
+        lb_h = corr_CD_freq(eval_matrix, words, wp3, logfreqs)
         isotropy, len_centroid = isotropyANDcentroid(eval_matrix)
-        mean_sp = mean_scalar_proj(eval_matrix, centroid)
-        cfreq_enc = freq_encoding(eval_matrix, centroid, freqs, words)
+        lf_sp_cor = log_freq_target_diff(
+            eval_matrix, words, gold, logfreqs, centroid)
 
         # print statistics
-        result_tuple = (alpha, wordsim, log_bias, isotropy, len_centroid, cfreq_enc)
+        result_tuple = (alpha, wordsim, log_bias,
+                        isotropy, len_centroid, lf_sp_cor, lb_l, lb_m, lb_h)
         output = ''
         for entry in result_tuple:
             output += '{:.6f}\t'.format(entry)
