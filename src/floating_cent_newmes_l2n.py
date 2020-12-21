@@ -107,7 +107,6 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
     scalar_projection_diff = []
     for (word1, word2) in targets:
         # get distance for all targets, nan if oof
-        logging.info("im feeling it now mr crabs")
         if word1 in words and word2 in words:
             vector1 = matrix[words.index(word1)]
             vector2 = matrix[words.index(word2)]
