@@ -21,7 +21,7 @@ def log_freq_target_diff(matrix, words, targets, freq, centroid):
             sp_2 = np.dot(vector2, cent)
 
             diff = abs(freq[word1] - freq[word2])
-            sp_diff = (sp_1 - sp_2)[0][0]
+            sp_diff = (sp_1 - sp_2).item()
         else:
             diff = np.nan
             sp_diff = np.nan
