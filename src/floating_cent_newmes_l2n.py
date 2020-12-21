@@ -225,8 +225,8 @@ def main():
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
 
 # vector = np.array([1, 2, 3])
 # centroid = np.array([2, 3, 4])
