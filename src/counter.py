@@ -17,12 +17,14 @@ def word_freq_counter(words, targets, freq):
 
 def _fadd(fw, fc):
     if fw < 100:
-        return fc[0] += 1
-    if 100 <= fw <= 200:
-        return fc[1] += 1
-    if 201 <= fw <= 1000:
-        return fc[2] += 1
-    return fc[3] += 1
+        fc[0] = fc[0] + 1
+    elif 100 <= fw <= 200:
+        fc[1] = fc[1] + 1
+    elif 201 <= fw <= 1000:
+        fc[2] = fc[2] + 1
+    else:
+        fc[3] = fc[3] + 1
+    return fc
 
 def loadMatrix(path):
     matrix_full = []
@@ -100,7 +102,6 @@ def main():
 
     print("<100 \t 100 - 200 \t 201 - 1000 \t >1000")
     print(freq_c)
-
 
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
