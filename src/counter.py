@@ -7,13 +7,17 @@ from scipy.stats import spearmanr
 
 
 def word_freq_counter(targets, freq):
-    print(targets)
-    print(freq)
     freq_c = [0, 0, 0, 0]
     for (word1, word2) in targets:
-        i = give_index(freq[word1])
+        bla = freq[word1]
+        i = give_index(bla)
+        logging.info('bla {}, i {}'.format(bla, i))
         freq_c[i] += 1
-        i = give_index(freq[word2])
+        
+        bla = freq[word2]
+        i = give_index(bla)
+        logging.info('bla {}, i {}'.format(bla, i))
+
         freq_c[i] += 1
     return freq_c
 
