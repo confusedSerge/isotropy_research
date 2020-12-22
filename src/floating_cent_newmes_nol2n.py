@@ -41,6 +41,7 @@ def corr_CD_freq(matrix, words, targets, freq):
         freq_diff += [diff]
     return spearmanr(scores, freq_diff, nan_policy='omit')[0]
 
+
 def word_freq_spliter(words, targets, freq):
     freq_100_200 = []
     freq_201_1000 = []
@@ -194,7 +195,7 @@ def main():
     logging.info("wp3: {}".format(wp3))
 
     # print labels for each column
-    print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t lf_sp_cor \t lb_l \t lb_m \t lb_h')
+    print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t lf_sp_cor')
 
     while alpha <= end:
         logging.info("Currently at alpha=" + str(alpha))
@@ -204,16 +205,16 @@ def main():
         # calculate statistics
         wordsim = corr_CD_wordsim(eval_matrix, words, gold)
         log_bias = corr_CD_freq(eval_matrix, words, gold, logfreqs)
-        lb_l = corr_CD_freq(eval_matrix, words, wp1, logfreqs)
-        lb_m = corr_CD_freq(eval_matrix, words, wp2, logfreqs)
-        lb_h = corr_CD_freq(eval_matrix, words, wp3, logfreqs)
+        # lb_l = corr_CD_freq(eval_matrix, words, wp1, logfreqs)
+        # lb_m = corr_CD_freq(eval_matrix, words, wp2, logfreqs)
+        # lb_h = corr_CD_freq(eval_matrix, words, wp3, logfreqs)
         isotropy, len_centroid = isotropyANDcentroid(eval_matrix)
         lf_sp_cor = log_freq_target_diff(
-            eval_matrix, words, gold, logfreqs, centroid)
+            eval_matrix, words, gold, logfreqs)
 
         # print statistics
         result_tuple = (alpha, wordsim, log_bias,
-                        isotropy, len_centroid, lf_sp_cor, lb_l, lb_m, lb_h)
+                        isotropy, len_centroid, lf_sp_cor)
         output = ''
         for entry in result_tuple:
             output += '{:.6f}\t'.format(entry)

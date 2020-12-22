@@ -110,7 +110,7 @@ def main():
     eval_matrix = matrix - alpha * centroid
 
     # calculate statistics
-    log_freq_diff, scalar_projection_diff = log_freq_target_diff(eval_matrix, words, gold, logfreqs, centroid)
+    log_freq_diff, scalar_projection_diff = log_freq_target_diff(eval_matrix, words, gold, logfreqs)
 
     # print statistics
     output = ''
