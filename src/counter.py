@@ -104,9 +104,5 @@ def main():
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
-# if __name__ == '__main__':
-#     main()
-
-bla = [0, 0]
-bla[0] += 1
-print(bla)
+if __name__ == '__main__':
+    main()
