@@ -10,9 +10,9 @@ def word_freq_counter(targets, freq):
     freq_c = [0, 0, 0, 0]
     for (word1, word2) in targets:
         print(freq_c)
-        i = _fadd(freq[word1])
+        i = give_index(freq[word1])
         freq_c[i] += 1
-        i = _fadd(freq[word2])
+        i = give_index(freq[word2])
         freq_c[i] += 1
     return freq_c
 
