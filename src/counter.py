@@ -6,10 +6,11 @@ from scipy.spatial.distance import cosine as cosine_distance
 from scipy.stats import spearmanr
 
 
-def word_freq_counter(words, targets, freq):
+def word_freq_counter(targets, freq):
     # TODO: counter
     freq_c = [0, 0, 0, 0]
     for (word1, word2) in targets:
+        print(freq_c)
         freq_c[_fadd(freq[word1], freq_c)] += 1
         freq_c[_fadd(freq[word2], freq_c)] += 1
     return freq_c
@@ -96,7 +97,7 @@ def main():
         if word not in freqs:
             freqs[word] = np.nan
 
-    freq_c = word_freq_counter(words, gold, freqs)
+    freq_c = word_freq_counter(gold, freqs)
 
     print("<100 \t 100 - 200 \t 201 - 1000 \t >1000")
     print(freq_c)
