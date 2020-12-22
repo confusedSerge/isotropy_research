@@ -7,7 +7,8 @@ from scipy.stats import spearmanr
 
 
 # returns correlation between measured CD and freq
-def log_freq_target_diff(matrix, words, targets, freq, centroid):
+def log_freq_target_diff(matrix, words, targets, freq):
+    centroid = np.mean(matrix, axis=0)
     freq_diff = []
     scalar_projection_diff = []
     for (word1, word2) in targets:

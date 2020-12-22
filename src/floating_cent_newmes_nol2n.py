@@ -46,14 +46,13 @@ def word_freq_spliter(words, targets, freq):
     freq_201_1000 = []
     freq_g1000 = []
     for (word1, word2) in targets:
-        # get distance for all targets, nan if oof
         if word1 in words and word2 in words:
             freq_w = max(freq[word1], freq[word2])
             if 100 <= freq_w <= 200:
                 freq_100_200.append((word1, word2))
-            if 201 <= freq_w <= 1000:
+            elif 201 <= freq_w <= 1000:
                 freq_201_1000.append((word1, word2))
-            if freq_w > 1000:
+            elif freq_w > 1000:
                 freq_g1000.append((word1, word2))
 
     return freq_100_200, freq_201_1000, freq_g1000
@@ -99,9 +98,10 @@ def isotropyANDcentroid(matrix):
     return isotropy, centroid_length
 
 
-def log_freq_target_diff(matrix, words, targets, freq, centroid):
+def log_freq_target_diff(matrix, words, targets, freq):
     freq_diff = []
     scalar_projection_diff = []
+    centroid = np.mean(matrix, axis=0)
     for (word1, word2) in targets:
         # get distance for all targets, nan if oof
         if word1 in words and word2 in words:
@@ -190,6 +190,10 @@ def main():
 
     wp1, wp2, wp3 = word_freq_spliter(words, gold, freqs)
 
+    logging.info("wp1: {}".format(wp1))
+    logging.info("wp2: {}".format(wp2))
+    logging.info("wp3: {}".format(wp3))
+
     # print labels for each column
     print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t lf_sp_cor \t lb_l \t lb_m \t lb_h')
 
@@ -222,5 +226,9 @@ def main():
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
+
+t = 120
+if 100 <= t <= 200:
+    print('bla') 

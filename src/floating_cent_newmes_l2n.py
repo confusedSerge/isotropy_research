@@ -102,9 +102,10 @@ def isotropyANDcentroid(matrix):
     return isotropy, centroid_length
 
 
-def log_freq_target_diff(matrix, words, targets, freq, centroid):
+def log_freq_target_diff(matrix, words, targets, freq):
     freq_diff = []
     scalar_projection_diff = []
+    centroid = np.mean(matrix, axis=0)
     for (word1, word2) in targets:
         # get distance for all targets, nan if oof
         if word1 in words and word2 in words:
