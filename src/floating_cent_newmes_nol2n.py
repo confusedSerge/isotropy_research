@@ -226,9 +226,5 @@ def main():
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
-# if __name__ == '__main__':
-#     main()
-
-t = 120
-if 100 <= t <= 200:
-    print('bla') 
+if __name__ == '__main__':
+    main()
