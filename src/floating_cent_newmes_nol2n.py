@@ -54,9 +54,6 @@ def word_freq_spliter(words, targets, freq):
                 freq_201_1000.append((word1, word2))
             elif freq_w > 1000:
                 freq_g1000.append((word1, word2))
-
-            
-
     return freq_100_200, freq_201_1000, freq_g1000
 
 

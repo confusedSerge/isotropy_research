@@ -7,16 +7,17 @@ from scipy.stats import spearmanr
 
 
 def word_freq_counter(targets, freq):
-    # TODO: counter
     freq_c = [0, 0, 0, 0]
     for (word1, word2) in targets:
         print(freq_c)
-        freq_c[_fadd(freq[word1], freq_c)] += 1
-        freq_c[_fadd(freq[word2], freq_c)] += 1
+        i = _fadd(freq[word1])
+        freq_c[i] += 1
+        i = _fadd(freq[word2])
+        freq_c[i] += 1
     return freq_c
 
 
-def _fadd(fw, fc):
+def _fadd(fw):
     if fw < 100:
         return 0
     elif 100 <= fw <= 200:
