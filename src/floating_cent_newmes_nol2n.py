@@ -47,13 +47,15 @@ def word_freq_spliter(words, targets, freq):
     freq_g1000 = []
     for (word1, word2) in targets:
         if word1 in words and word2 in words:
-            freq_w = max(freq[word1], freq[word2])
+            freq_w = min(freq[word1], freq[word2])
             if 100 <= freq_w <= 200:
                 freq_100_200.append((word1, word2))
             elif 201 <= freq_w <= 1000:
                 freq_201_1000.append((word1, word2))
             elif freq_w > 1000:
                 freq_g1000.append((word1, word2))
+
+            
 
     return freq_100_200, freq_201_1000, freq_g1000
 
