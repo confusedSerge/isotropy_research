@@ -10,22 +10,19 @@ def word_freq_counter(words, targets, freq):
     # TODO: counter
     freq_c = [0, 0, 0, 0]
     for (word1, word2) in targets:
-        freq_c = _fadd(freq[word1], freq_c)
-        freq_c = _fadd(freq[word2], freq_c)
-        print(freq_c)
+        freq_c[_fadd(freq[word1], freq_c)] += 1
+        freq_c[_fadd(freq[word2], freq_c)] += 1
     return freq_c
 
 
 def _fadd(fw, fc):
     if fw < 100:
-        fc[0] = fc[0] + 1
+        return 0
     elif 100 <= fw <= 200:
-        fc[1] = fc[1] + 1
+        return 1
     elif 201 <= fw <= 1000:
-        fc[2] = fc[2] + 1
-    else:
-        fc[3] = fc[3] + 1
-    return fc
+        return 2
+    return 4
 
 def loadMatrix(path):
     matrix_full = []
@@ -107,5 +104,9 @@ def main():
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
+
+bla = [0, 0]
+bla[0] += 1
+print(bla)
