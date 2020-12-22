@@ -22,7 +22,7 @@ def _fadd(fw, fc):
         return 1
     elif 201 <= fw <= 1000:
         return 2
-    return 4
+    return 3
 
 def loadMatrix(path):
     matrix_full = []
