@@ -19,7 +19,7 @@ def word_freq_counter(targets, freq):
             freq_c[give_index(freq[word2])] += 1
         except:
             err_c += 1
-    return freq_c
+    return freq_c, err_c
 
 
 def give_index(fw):
@@ -103,10 +103,10 @@ def main():
         if word not in freqs:
             freqs[word] = np.nan
 
-    freq_c = word_freq_counter(gold, freqs)
+    freq_c, err_c = word_freq_counter(gold, freqs)
 
-    print("<100 \t 100 - 200 \t 201 - 1000 \t >1000")
-    print(freq_c)
+    print("<100 \t 100 - 200 \t 201 - 1000 \t >1000 \t err_c")
+    print("{} \t {}".format(freq_c, err_c))
 
     logging.info("--- %s seconds ---" % (time.time() - start_time))
 
