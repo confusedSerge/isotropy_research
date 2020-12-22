@@ -17,7 +17,7 @@ def word_freq_counter(targets, freq):
     return freq_c
 
 
-def _fadd(fw):
+def give_index(fw):
     if fw < 100:
         return 0
     elif 100 <= fw <= 200:
