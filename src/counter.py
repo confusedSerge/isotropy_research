@@ -12,6 +12,7 @@ def word_freq_counter(words, targets, freq):
     for (word1, word2) in targets:
         freq_c = _fadd(freq[word1], freq_c)
         freq_c = _fadd(freq[word2], freq_c)
+        print(freq_c)
     return freq_c
 
 
