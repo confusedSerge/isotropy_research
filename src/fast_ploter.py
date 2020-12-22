@@ -40,7 +40,7 @@ def main():
             continue
         ax1.plot(data[0], data[i], label=name)
     ax1.set_title(filePath.split('/')[-1] + ', ' + title)
-    ax1.set_ylim([0,1])
+    ax1.set_ylim([-0.2,1])
     plt.xlabel(name[0])
     plt.legend(loc='upper right')
     plt.savefig(outname)
