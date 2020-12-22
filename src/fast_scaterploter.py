@@ -43,9 +43,9 @@ def main():
 
     ax1.set_title(filePath.split('/')[-1] + ', ' + title)
     ax1.set_xlim([0,2])
-    ax1.set_ylim([0,2])
-    plt.xlabel('freq_diff')
-    plt.ylabel('score')
+    ax1.set_ylim([-1,1])
+    plt.xlabel('delta(logfreq)')
+    plt.ylabel('delta(scalarprojection)')
     plt.savefig(outname)
 
     logging.info("--- %s seconds ---" % (time.time() - start_time))

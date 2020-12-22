@@ -97,7 +97,6 @@ def isotropyANDcentroid(matrix):
 
     return isotropy, centroid_length
 
-
 def log_freq_target_diff(matrix, words, targets, freq):
     freq_diff = []
     scalar_projection_diff = []
@@ -114,15 +113,11 @@ def log_freq_target_diff(matrix, words, targets, freq):
 
             diff = abs(freq[word1] - freq[word2])
             sp_diff = (sp_1 - sp_2).item()
-
-            # logging.info("freq: {}, sp_diff: {}".format(diff, sp_diff))
         else:
             diff = np.nan
             sp_diff = np.nan
-        scalar_projection_diff.append(sp_diff)
+        scalar_projection_diff += [sp_diff]
         freq_diff += [diff]
-    # logging.info("freq: {}, sp_diff: {}".format(freq_diff, scalar_projection_diff))
-
     return spearmanr(freq_diff, scalar_projection_diff, nan_policy='omit')[0]
 
 
@@ -188,11 +183,11 @@ def main():
 
     # print("centroid length: {}".format(np.linalg.norm(centroid)))
 
-    wp1, wp2, wp3 = word_freq_spliter(words, gold, freqs)
+    # wp1, wp2, wp3 = word_freq_spliter(words, gold, freqs)
 
-    logging.info("wp1: {}".format(wp1))
-    logging.info("wp2: {}".format(wp2))
-    logging.info("wp3: {}".format(wp3))
+    # logging.info("wp1: {}".format(wp1))
+    # logging.info("wp2: {}".format(wp2))
+    # logging.info("wp3: {}".format(wp3))
 
     # print labels for each column
     print('alpha \t wordsim \t log_bias \t isotropy \t len_centroid* \t lf_sp_cor')
@@ -205,9 +200,6 @@ def main():
         # calculate statistics
         wordsim = corr_CD_wordsim(eval_matrix, words, gold)
         log_bias = corr_CD_freq(eval_matrix, words, gold, logfreqs)
-        # lb_l = corr_CD_freq(eval_matrix, words, wp1, logfreqs)
-        # lb_m = corr_CD_freq(eval_matrix, words, wp2, logfreqs)
-        # lb_h = corr_CD_freq(eval_matrix, words, wp3, logfreqs)
         isotropy, len_centroid = isotropyANDcentroid(eval_matrix)
         lf_sp_cor = log_freq_target_diff(
             eval_matrix, words, gold, logfreqs)
